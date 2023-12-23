@@ -1,0 +1,177 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>hu.ellipsysintegrations</groupId>
+    <artifactId>ellipsys-adapter</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>Ellipsys Integrations - Adapter Modules</name>
+
+    <modules>
+        <module>ellipsys-adapter/ellipsys-adapter-allure-server</module>
+    </modules>
+
+    <properties>
+        <!-- Project build properties -->
+        <encoding>UTF-8</encoding>
+        <project.encoding>UTF-8</project.encoding>
+        <project.build.sourceEncoding>${project.encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>
+        <java.version>21</java.version>
+
+        <!-- Global Maven Components-->
+        <maven.enforcer.plugin.version>3.3.0</maven.enforcer.plugin.version>
+        <required.maven.version>[3.9.3,)</required.maven.version>
+        <maven.jar.plugin.version>3.3.0</maven.jar.plugin.version>
+        <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
+        <maven.plugin.version>3.9.3</maven.plugin.version>
+        <maven.plugin.exec.version>3.1.0</maven.plugin.exec.version>
+        <maven.plugin.properties>1.1.0</maven.plugin.properties>
+        <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
+
+        <!-- Maven Build dependencies -->
+        <maven.source.plugin.version>3.3.0</maven.source.plugin.version>
+        <maven.javadoc.plugin.version>3.5.0</maven.javadoc.plugin.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        <maven.findbugs.plugin.version>3.0.5</maven.findbugs.plugin.version>
+        <findbugs.XmlOutputDirectory>${project.build.directory}/findbugs</findbugs.XmlOutputDirectory>
+        <git.commit.id.plugin.version>4.9.10</git.commit.id.plugin.version>
+        <skip.checkstyle>false</skip.checkstyle>
+        <maven.checkstyle.plugin.version>3.3.0</maven.checkstyle.plugin.version>
+        <checkstyle.config.directory>/etc/checkstyle</checkstyle.config.directory>
+        <checkstyle.config.file>checkstyle.xml</checkstyle.config.file>
+        <checkstyle.suppression.file>suppressions.xml</checkstyle.suppression.file>
+        <checkstyle.dtd.config.file>configuration_1_3.dtd</checkstyle.dtd.config.file>
+        <checkstyle.dtd.suppression.file>suppressions_1_2.dtd</checkstyle.dtd.suppression.file>
+        <checkstyle.output.file>${project.build.directory}/checkstyle-report/checkstyle-result.xml
+        </checkstyle.output.file>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Maven Enforcer -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven.enforcer.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven-version</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${required.maven.version}</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven Source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven JavaDoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludePackageNames>info.ellipsys.*</excludePackageNames>
+                </configuration>
+            </plugin>
+            <!-- Maven Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+            </plugin>
+            <!-- Maven Checkstyle -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <configLocation>${checkstyle.config.directory}/${checkstyle.config.file}</configLocation>
+                            <consoleOutput>true</consoleOutput>
+                            <failsOnError>false</failsOnError>
+                            <suppressionsLocation>${checkstyle.config.directory}/${checkstyle.suppression.file}
+                            </suppressionsLocation>
+                            <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+                            <outputFile>target/checkstyle-report/checkstyle-result.xml</outputFile>
+                            <skip>${skip.checkstyle}</skip>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <includeTestResources>true</includeTestResources>
+                            <testSourceDirectories>
+                                <testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>
+                            </testSourceDirectories>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Git Commit Id -->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>${git.commit.id.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <prefix>git</prefix>
+                    <verbose>false</verbose>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
+                    <format>properties</format>
+                    <gitDescribe>
+                        <skip>false</skip>
+                        <always>false</always>
+                        <abbrev>8</abbrev>
+                    </gitDescribe>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
