@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.2//EN"
+        "suppressions_1_2.dtd">
+
+<suppressions>
+    <suppress checks="Indentation"
+              files=""/>
+    <suppress checks="[a-zA-Z0-9]*"
+              files="[\\/]i18n[\\/]"/>
+</suppressions>
+
+
