@@ -18,43 +18,30 @@
     <properties>
         <skipTests>true</skipTests>
         <retryCount>0</retryCount>
-
+        <commons.cli.version>1.4</commons.cli.version>
+        <commons.io.version>2.6</commons.io.version>
+        <maven.plugin.exec.version>3.1.0</maven.plugin.exec.version>
+        <!-- Reporting -->
         <allure.server.protocol>http</allure.server.protocol>
         <allure.server.host>localhost</allure.server.host>
         <allure.server.port>5050</allure.server.port>
         <allure.projectId>default</allure.projectId>
         <allure.resultsDir>${project.build.directory}/allure-results/</allure.resultsDir>
-
-        <!-- Module dependency versions -->
-        <commons.cli.version>1.4</commons.cli.version>
-        <commons.io.version>2.6</commons.io.version>
-        <maven.plugin.exec.version>3.1.0</maven.plugin.exec.version>
-
+        <!-- Framework -->
         <spring.boot.version>3.2.1</spring.boot.version>
         <lombok.version>1.18.30</lombok.version>
-        <junit.version>5.9.3</junit.version>
-        <junit.platform.launcher.version>1.7.0</junit.platform.launcher.version>
-        <junit.platform.suit.engine.version>1.8.1</junit.platform.suit.engine.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <!-- Testing -->
+        <junit.version>5.10.1</junit.version>
+        <junit.platform.version>1.10.1</junit.platform.version>
         <restassured.version>5.3.1</restassured.version>
         <json.smart.version>2.3</json.smart.version>
-        <selenide.version>6.16.0</selenide.version>
-        <allure.version>2.23.0</allure.version>
-        <allure.maven.version>2.12.0</allure.maven.version>
-        <assertj.core.version>3.24.2</assertj.core.version>
-        <xmlunit.assertj.version>2.7.0</xmlunit.assertj.version>
-        <soap.api.version>1.4.0</soap.api.version>
-        <awaitility.version>4.2.0</awaitility.version>
-        <opencsv.version>5.7.1</opencsv.version>
-        <datafaker.version>2.0.1</datafaker.version>
-        <google.oauth.client.jetty.version>1.31.4</google.oauth.client.jetty.version>
-        <google.api.client.version>1.31.2</google.api.client.version>
-        <google.api.services.gmail.version>v1-rev20210111-1.31.0</google.api.services.gmail.version>
-        <javax.mail.version>1.6.2</javax.mail.version>
-        <allure.environment.writer>1.0.0</allure.environment.writer>
+        <jackson.annotation.version>2.16.1</jackson.annotation.version>
+        <selenide.version>7.0.4</selenide.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
     </properties>
 
     <dependencies>
-        <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -71,7 +58,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
-        <!-- Java Commons -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -82,23 +73,56 @@
             <artifactId>commons-cli</artifactId>
             <version>${commons.cli.version}</version>
         </dependency>
-        <!-- RestAssured -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-engine</artifactId>
+            <version>${junit.platform.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${restassured.version}</version>
         </dependency>
-        <!--Lombok Builder -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
-        <!-- Json Smart -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.annotation.version}</version>
+        </dependency>
         <dependency>
             <groupId>net.minidev</groupId>
             <artifactId>json-smart</artifactId>
             <version>${json.smart.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
         </dependency>
     </dependencies>
 

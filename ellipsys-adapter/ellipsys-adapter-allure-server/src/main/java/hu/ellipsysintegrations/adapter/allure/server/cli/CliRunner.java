@@ -4,6 +4,8 @@ import hu.ellipsysintegrations.adapter.allure.server.api.client.AllureServerClie
 import hu.ellipsysintegrations.adapter.allure.server.api.dto.ResultContainer;
 import hu.ellipsysintegrations.adapter.allure.server.api.dto.SendResultsRequestDto;
 import hu.ellipsysintegrations.adapter.allure.server.exception.AllureServerAdapterException;
+import hu.ellipsysintegrations.adapter.allure.server.properties.AllureServerAdapterProperties;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
@@ -29,8 +31,13 @@ public class CliRunner implements CommandLineRunner {
     @Autowired
     private ApplicationContext ac;
 
+    @Getter(AccessLevel.PROTECTED)
     @Autowired
     private AllureServerClient allureServerClient;
+
+    @Getter(AccessLevel.PROTECTED)
+    @Autowired
+    private AllureServerAdapterProperties properties;
 
     @Autowired
     private Environment environment;
@@ -84,8 +91,7 @@ public class CliRunner implements CommandLineRunner {
         String projectId = cmd.getOptionValue(OptionsAndArguments.ARGUMENT_PROJECT_ID);
         log.info(LogMessages.PROJECT_ID, projectId);
 
-        String resultsDirPath = cmd.getOptionValue(OptionsAndArguments.ARGUMENT_RESULTS_DIR,
-                allureServerClient().properties().defaultFolder());
+        String resultsDirPath = cmd.getOptionValue(OptionsAndArguments.ARGUMENT_RESULTS_DIR, properties.defaultFolder());
         log.info(LogMessages.RESULTS_DIR, resultsDirPath);
 
         allureServerClient.postSendResults(projectId, requestDtoBuilder(resultsDirPath).build());
@@ -122,7 +128,7 @@ public class CliRunner implements CommandLineRunner {
         return resource;
     }
 
-    private SendResultsRequestDto.SendResultsRequestDtoBuilder requestDtoBuilder(String resultsDirPath) {
+    public SendResultsRequestDto.SendResultsRequestDtoBuilder requestDtoBuilder(String resultsDirPath) {
         SendResultsRequestDto.SendResultsRequestDtoBuilder requestDtoBuilder = SendResultsRequestDto.builder();
 
         File resultsDirectory = loadResultsDirectory(resultsDirPath);
@@ -150,7 +156,7 @@ public class CliRunner implements CommandLineRunner {
     }
 
     private void reportUrlSystem(String projectId) {
-        String reportUrlSystemKey = allureServerClient().properties().allureReportUrlSystemKey();
+        String reportUrlSystemKey = properties.allureReportUrlSystemKey();
 
         System.setProperty(reportUrlSystemKey, "");
         log.info(LogMessages.SYSTEM_PROPERTY_ERASED, reportUrlSystemKey);

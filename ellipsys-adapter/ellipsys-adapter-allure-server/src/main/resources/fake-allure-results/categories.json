@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Configuration error",
+    "traceRegex": ".*MissingEnvironmentException.*"
+  },
+  {
+    "name": "Configuration error",
+    "traceRegex": ".*ExceptionInInitializerError.*"
+  },
+  {
+    "name": "Configuration error",
+    "traceRegex": ".*IllegalStateException.*"
+  },
+  {
+    "name": "DNS/Proxy error",
+    "traceRegex": ".*UnknownHostException.*"
+  },
+  {
+    "name": "Infrastructure problems",
+    "matchedStatuses": [
+      "broken",
+      "failed"
+    ],
+    "messageRegex": ".*CannotGetJdbcConnectionException.*"
+  },
+  {
+    "name": "Outdated tests",
+    "matchedStatuses": [
+      "broken"
+    ],
+    "traceRegex": ".*FileNotFoundException.*"
+  },
+  {
+    "name": "Product defects",
+    "matchedStatuses": [
+      "failed"
+    ],
+    "traceRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Product defects",
+    "matchedStatuses": [
+      "failed",
+      "broken"
+    ],
+    "traceRegex": ".*ConditionTimeoutException.*"
+  },
+  {
+    "name": "Skipped tests",
+    "matchedStatuses": [
+      "skipped"
+    ]
+  }
+]

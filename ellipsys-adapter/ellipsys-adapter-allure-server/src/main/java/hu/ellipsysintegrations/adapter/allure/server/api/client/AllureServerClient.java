@@ -23,11 +23,13 @@ import static org.springframework.http.HttpStatus.*;
 @Component
 @Accessors(fluent = true)
 public class AllureServerClient {
+
+    @Getter(AccessLevel.PROTECTED)
     @Autowired
     private AllureServerAdapterProperties properties;
 
     public String baseUrl() {
-        return String.format("{}://{}:{}/allure-docker-service", properties.protocol(), properties.host(), properties.port());
+        return String.format("%s://%s:%d/allure-docker-service", properties.protocol(), properties.host(), properties.mappedPort());
     }
 
     public Map<String, String> headers() {
@@ -35,7 +37,7 @@ public class AllureServerClient {
         requestHeader.put(Header.ACCEPT, Header.ANY);
         requestHeader.put(Header.CONNECTION, Header.KEEP_ALIVE);
         requestHeader.put(Header.HOST, properties.host());
-        requestHeader.put(Header.REFERER, String.format("{}://{}:{}", properties.protocol(), properties.host(), properties.port()));
+        requestHeader.put(Header.REFERER, String.format("%s://%s:%d", properties.protocol(), properties.host(), properties.mappedPort()));
         return requestHeader;
     }
 
@@ -46,6 +48,7 @@ public class AllureServerClient {
 
         return RestAssured
                 .given()
+                .log().ifValidationFails()
                 .queryParam(QueryParam.PROJECT_ID, projectId)
                 .queryParam(QueryParam.FORCE_PROJECT_CREATION, QueryParam.TRUE)
                 .headers(requestHeader)
@@ -53,6 +56,7 @@ public class AllureServerClient {
                 .when()
                 .post(baseUrl() + Path.SEND_RESULTS)
                 .then()
+                .log().ifValidationFails()
                 .spec(new ResponseSpecBuilder()
                         .expectContentType(MediaType.APPLICATION_JSON_VALUE)
                         .expectStatusCode(Matchers.anyOf(Matchers.is(OK.value()), Matchers.is(ACCEPTED.value()), Matchers.is(CREATED.value())))
@@ -63,11 +67,13 @@ public class AllureServerClient {
     public Response getGenerateReport(String projectId) {
         return RestAssured
                 .given()
+                .log().ifValidationFails()
                 .queryParam(QueryParam.PROJECT_ID, projectId)
                 .headers(headers())
                 .when()
                 .get(baseUrl() + Path.GENERATE_REPORT)
                 .then()
+                .log().ifValidationFails()
                 .spec(new ResponseSpecBuilder()
                         .expectContentType(MediaType.APPLICATION_JSON_VALUE)
                         .expectStatusCode(Matchers.anyOf(Matchers.is(OK.value()), Matchers.is(ACCEPTED.value()), Matchers.is(CREATED.value())))
@@ -78,11 +84,13 @@ public class AllureServerClient {
     public Response getCleanResults(String projectId) {
         return RestAssured
                 .given()
+                .log().ifValidationFails()
                 .queryParam(QueryParam.PROJECT_ID, projectId)
                 .headers(headers())
                 .when()
                 .get(baseUrl() + Path.CLEAN_RESULTS)
                 .then()
+                .log().ifValidationFails()
                 .spec(new ResponseSpecBuilder()
                         .expectContentType(MediaType.APPLICATION_JSON_VALUE)
                         .expectStatusCode(Matchers.anyOf(Matchers.is(OK.value()), Matchers.is(ACCEPTED.value()), Matchers.is(CREATED.value())))
